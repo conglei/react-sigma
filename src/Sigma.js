@@ -1,12 +1,12 @@
 // @flow
 
-import React from 'react'
-import { embedProps } from './tools'
-import '../sigma/main'
+import React from 'react';
+import { embedProps } from './tools';
+import '../sigma/main';
 
 type Props = {
   settings: Sigma$Settings,
-  renderer?: "webgl" | "canvas" | "svg",
+  renderer?: 'webgl' | 'canvas' | 'svg',
   style?: Object,
   children?: mixed,
   graph?: Sigma$Graph$Data,
@@ -18,6 +18,7 @@ type Props = {
   onOverEdge?: (e: Sigma$Event) => void, // TODO: onOverEdge does not work?
   onOutEdge?: (e: Sigma$Event) => void,
   onClickStage?: (e: Sigma$Event) => void,
+  nodeColorMapping?: String
 };
 type DefaultProps = {
   settings: Sigma$Settings
@@ -25,7 +26,6 @@ type DefaultProps = {
 type State = {
   renderer: boolean
 };
-
 
 /**
  *
@@ -84,7 +84,6 @@ type State = {
  *
  */
 
-
 class Sigma extends React.PureComponent {
   props: Props;
   state: State;
@@ -95,66 +94,83 @@ class Sigma extends React.PureComponent {
 
   static defaultProps: DefaultProps = {
     settings: {
-      defaultNodeColor: "#3388AA",
+      defaultNodeColor: '#3388AA',
       defaultLabelSize: 8,
-      defaultLabelColor: "#777",
+      defaultLabelColor: '#777',
       labelThreshold: 12,
-      hoverFontStyle: "text-size: 11",
+      hoverFontStyle: 'text-size: 11',
       batchEdgesDrawing: true,
       drawEdges: true,
       drawEdgeLabels: false
     },
     style: {
-      maxWidth: "inherit",
-      height: "400px"
+      maxWidth: 'inherit',
+      height: '400px'
     }
-  }
+  };
 
   constructor(props: Props) {
     super(props);
-    this.state = {renderer:false}
-    let settings = this.props.settings ? this.props.settings : {}
-    this.sigma = new sigma({settings})
-    this.initRenderer = this.initRenderer.bind(this)
-    Sigma.bindHandlers(this.props, this.sigma)
-    if(this.props.graph) {
+    this.state = { renderer: false };
+    let settings = this.props.settings ? this.props.settings : {};
+    this.sigma = new sigma({ settings });
+    this.initRenderer = this.initRenderer.bind(this);
+    Sigma.bindHandlers(this.props, this.sigma);
+    if (this.props.graph) {
       try {
-        this.sigma.graph.read(this.props.graph)
-      } catch(e) {
-        if(this.props.onSigmaException)
-          this.props.onSigmaException(e)
+        this.sigma.graph.read(this.props.graph);
+      } catch (e) {
+        if (this.props.onSigmaException) this.props.onSigmaException(e);
       }
     }
   }
 
+  componentDidMount() {
+    console.log(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.nodeColorMapping !== this.props.nodeColorMapping) {
+      const nodes = this.sigma.graph.nodes();
+      nodes.forEach(node => {
+        console.log(node);
+        node.color = node[nextProps.nodeColorMapping];
+      });
+      this.sigma.refresh();
+    }
+  }
+
   initRenderer(container: HTMLElement) {
-    if(container) {
-      let options: Object = {container}
-      if(this.props.renderer)
-        options.type = this.props.renderer
-      this.sigmaRenderer = this.sigma.addRenderer(options)
-      this.sigma.refresh()
-      this.setState({renderer:true})
-    } else if(this.sigmaRenderer) {
-      this.sigma.killRenderer(this.sigmaRenderer)
-      this.sigmaRenderer = null
-      this.setState({renderer:false})
+    if (container) {
+      let options: Object = { container };
+      if (this.props.renderer) options.type = this.props.renderer;
+      this.sigmaRenderer = this.sigma.addRenderer(options);
+      this.sigma.refresh();
+      this.setState({ renderer: true });
+    } else if (this.sigmaRenderer) {
+      this.sigma.killRenderer(this.sigmaRenderer);
+      this.sigmaRenderer = null;
+      this.setState({ renderer: false });
     }
   }
 
   componentWillUnmount() {
-    this.sigma.kill()
-    this.sigmaRenderer = null
+    this.sigma.kill();
+    this.sigmaRenderer = null;
   }
 
   render() {
-    let children = this.state.renderer ? embedProps(this.props.children, {sigma: this.sigma}) : null
-    return <div ref={this.initRenderer} style={this.props.style}>
-        { children }
+    let children = this.state.renderer
+      ? embedProps(this.props.children, { sigma: this.sigma })
+      : null;
+    return (
+      <div ref={this.initRenderer} style={this.props.style}>
+        {children}
       </div>
+    );
   }
 
-/**
+  /**
 Initialize event handlers with sigma.
 
 Event handler function receives [Sigma Event](https://github.com/jacomyal/sigma.js/wiki/Events-API)
@@ -175,13 +191,20 @@ type Sigma$EventHandler = (node:Sigma$Event) => void
 **/
 
   static bindHandlers(handlers, sigma) {
-    ["clickNode", "overNode", "outNode", "clickEdge", "overEdge", "outEdge", "clickStage"].forEach(
-      event => {
-          let handler = "on" + event[0].toUpperCase() + event.substr(1);
-          if (handlers[handler]) {
-            sigma.bind(event, handlers[handler])
-          }
-        } );
+    [
+      'clickNode',
+      'overNode',
+      'outNode',
+      'clickEdge',
+      'overEdge',
+      'outEdge',
+      'clickStage'
+    ].forEach(event => {
+      let handler = 'on' + event[0].toUpperCase() + event.substr(1);
+      if (handlers[handler]) {
+        sigma.bind(event, handlers[handler]);
+      }
+    });
   }
 }
 
