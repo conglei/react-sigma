@@ -1,18 +1,20 @@
 {
-  "name": "react-sigma",
-  "description": "Lightweight but powerful library for drawing network graphs built on top of dunnock/react-sigma",
+  "name": "react-sigma-conglei",
+  "description":
+    "Lightweight but powerful library for drawing network graphs built on top of dunnock/react-sigma",
   "author": "Conglei Shi <shiconglei@gmail.com>",
   "version": "1.1.28",
   "license": "MIT",
   "bugs": "https://github.com/conglei/react-sigma/issues",
   "homepage": "https://github.com/conglei/react-sigma",
-  "repository": "dunnock/react-sigma",
+  "repository": "conglei/react-sigma",
   "scripts": {
     "build": "babel-node scripts/build-cli.js",
     "build:v": "babel-node scripts/build-cli.js --verbose",
     "build:sigma": "babel-node scripts/build-cli.js --sigma-only",
     "build:stats": "babel-node scripts/build-cli.js --stats",
-    "build:doc": "documentation build src/* --shallow --config documentation.yml --github --format md --output DOCS.md",
+    "build:doc":
+      "documentation build src/* --shallow --config documentation.yml --github --format md --output DOCS.md",
     "pretest": "npm run build:sigma",
     "test": "node scripts/test.js --env=jsdom",
     "publish:patch": "npm publish",
@@ -23,15 +25,7 @@
     "build-storybook": "build-storybook -s public",
     "deploy-storybook": "storybook-to-ghpages"
   },
-  "files": [
-    "lib",
-    "dist",
-    "es",
-    "sigma",
-    "README.md",
-    "DOCS.md",
-    "LICENSE"
-  ],
+  "files": ["lib", "dist", "es", "sigma", "README.md", "DOCS.md", "LICENSE"],
   "engines": {
     "node": ">=6.3.0"
   },
@@ -116,18 +110,13 @@
     "react-dom": ">=15.3"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "jsx",
-      "js",
-      "json"
-    ],
+    "moduleFileExtensions": ["jsx", "js", "json"],
     "moduleNameMapper": {
-      "^.+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/config/jest/FileStub.js",
+      "^.+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+        "<rootDir>/config/jest/FileStub.js",
       "^.+\\.css$": "<rootDir>/config/jest/CSSStub.js"
     },
-    "setupFiles": [
-      "<rootDir>/config/polyfills.js"
-    ],
+    "setupFiles": ["<rootDir>/config/polyfills.js"],
     "testPathIgnorePatterns": [
       "<rootDir>/(build|docs|node_modules|es|lib|dest|sigma|scripts|stats)/"
     ],
