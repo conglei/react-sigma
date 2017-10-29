@@ -112,35 +112,47 @@ class Sigma extends React.PureComponent {
   constructor(props: Props) {
     super(props);
     this.state = { renderer: false };
-    let settings = this.props.settings ? this.props.settings : {};
-    this.sigma = new sigma({ settings });
+    let settings = props.settings ? props.settings : {};
     this.initRenderer = this.initRenderer.bind(this);
-    Sigma.bindHandlers(this.props, this.sigma);
-    if (this.props.graph) {
+    this.createSigmaInstance(props.graph, settings, props);
+  }
+
+  createSigmaInstance = (graph, settings, props) => {
+    if (this.sigma) {
+      this.sigma.kill();
+      this.sigmaRenderer = null;
+    }
+    this.sigma = new sigma({ settings });
+    Sigma.bindHandlers(props, this.sigma);
+    if (graph) {
       try {
-        this.sigma.graph.read(this.props.graph);
+        this.sigma.graph.read(graph);
       } catch (e) {
         if (this.props.onSigmaException) this.props.onSigmaException(e);
       }
     }
-  }
-
-  componentDidMount() {
-    console.log(this.props);
-  }
+  };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.nodeColorMapping !== this.props.nodeColorMapping) {
       const nodes = this.sigma.graph.nodes();
       nodes.forEach(node => {
-        console.log(node);
         node.color = node[nextProps.nodeColorMapping];
       });
       this.sigma.refresh();
     }
+
+    if (nextProps.graph !== this.props.graph) {
+      let settings = nextProps.settings ? nextProps.settings : {};
+      this.createSigmaInstance(nextProps.graph, settings, nextProps);
+      this.setState({ renderer: false });
+      this.initRenderer(this.container);
+      this.sigma.ttttt = '111';
+    }
   }
 
   initRenderer(container: HTMLElement) {
+    this.container = container;
     if (container) {
       let options: Object = { container };
       if (this.props.renderer) options.type = this.props.renderer;

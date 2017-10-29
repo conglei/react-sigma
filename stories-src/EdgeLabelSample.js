@@ -7,6 +7,19 @@ import {
   ForceAtlas2
 } from '../src/index';
 
+const graph_2 = {
+  nodes: [
+    { id: 'a', label: 'A', color: '#003dc1', c2: 'black', size: 30 },
+    { id: 'b', label: 'B', color: '#FF3211', c2: 'red', size: 5 },
+    { id: 'c', label: 'C', color: '#GGd311', c2: 'blue', size: 8 }
+  ],
+  edges: [
+    { id: 'a_to_b', source: 'a', target: 'b', label: 'A -> B', size: 10 },
+    { id: 'b_to_c', source: 'b', target: 'c', label: 'B -> C', size: 2 },
+    { id: 'c_to_a', source: 'c', target: 'a', label: 'C -> A', size: 7 }
+  ]
+};
+
 class EdgeLabelSample extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -35,10 +48,18 @@ class EdgeLabelSample extends React.PureComponent {
     });
   };
 
+  changeGraph = () => {
+    console.log('changing graph');
+    this.setState({
+      graph: graph_2
+    });
+  };
+
   render() {
     return (
       <div>
         <button onClick={this.changeColorMapping}>Click</button>
+        <button onClick={this.changeGraph}>Change Graph</button>
         <div>
           <Sigma
             renderer="canvas"
