@@ -147,7 +147,6 @@ class Sigma extends React.PureComponent {
       this.createSigmaInstance(nextProps.graph, settings, nextProps);
       this.setState({ renderer: false });
       this.initRenderer(this.container);
-      this.sigma.ttttt = '111';
     }
   }
 
