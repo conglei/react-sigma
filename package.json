@@ -3,7 +3,7 @@
   "description":
     "Lightweight but powerful library for drawing network graphs built on top of dunnock/react-sigma",
   "author": "Conglei Shi <shiconglei@gmail.com>",
-  "version": "1.1.29",
+  "version": "1.1.31",
   "license": "MIT",
   "bugs": "https://github.com/conglei/react-sigma/issues",
   "homepage": "https://github.com/conglei/react-sigma",

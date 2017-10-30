@@ -112,9 +112,11 @@ class ForceAtlas2 extends React.Component {
 
   _refreshGraph(sigma) {
     let s = sigma;
-
+    // console.log(s);
     let drawEdges = s.settings('drawEdges');
-    if (s.graph.edges().length > 1000) s.settings({ drawEdges: false });
+    if (s.graph.edges().length > 1000) {
+      s.settings({ drawEdges: false });
+    }
 
     s.startForceAtlas2(this._stripOptions(this.props));
     // TODO: convert running status to state

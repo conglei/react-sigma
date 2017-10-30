@@ -1,11 +1,11 @@
 // @flow
 
-import React from 'react'
-import '../sigma/plugins.relativeSize'
+import React from 'react';
+import '../sigma/plugins.relativeSize';
 
 type Props = {
-	initialSize: number,
-	sigma?: sigma
+  initialSize: number,
+  sigma?: sigma
 };
 
 /**
@@ -22,14 +22,20 @@ Sets nodes sizes corresponding its degree.
 **/
 
 class RelativeSize extends React.Component {
-	props: Props;
+  props: Props;
 
-	constructor(props: Props) {
-		super(props)
-		sigma.plugins.relativeSize(this.props.sigma, this.props.initialSize)
-	}
+  constructor(props: Props) {
+    super(props);
+    sigma.plugins.relativeSize(this.props.sigma, this.props.initialSize);
+  }
 
-	render = () => null
+  componentWillReceiveProps(nextProps) {
+    if (this.props.sigma !== nextProps.sigma) {
+      sigma.plugins.relativeSize(nextProps.sigma, nextProps.initialSize);
+    }
+  }
+
+  render = () => null;
 }
 
 export default RelativeSize;
